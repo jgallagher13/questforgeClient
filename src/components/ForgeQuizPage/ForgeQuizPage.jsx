@@ -1,6 +1,8 @@
 import { useState } from 'react'
+import { createQuiz } from '../../../utilities/quiz-api'
 export default function ForgeQuiz() {
     const [quizData, setQuizData] = useState({
+        title: '',
         questions: [{ question: '', options: ['', '', ''], correctAnswer: 0 }],
       });
     
@@ -28,16 +30,43 @@ export default function ForgeQuiz() {
         });
       };
     
-      const handleSubmit = (event) => {
-        event.preventDefault();
-        console.log('Submitted Quiz:', quizData);
-        // You can add code here to send 'quizData' to your backend for storage
-      };
+      async function handleSubmit(event) {
+          event.preventDefault();
+      
+          // Extract relevant data from quizData
+          const { questions, title } = quizData;
+      
+          // Prepare the data according to the Mongoose model
+          const formattedQuizData = {
+            title,
+            questions: questions.map((question) => ({
+              questionText: question.question,
+              options: question.options,
+              correctAnswerIndex: question.correctAnswer,
+            })),
+          };
+      
+          // Call createQuiz function with the formatted data
+          const createdQuiz = await createQuiz(formattedQuizData);
+      
+          // Reset the state after successful quiz creation
+          setQuizData({
+            title: '',
+            questions: [{ question: '', options: ['', '', ''], correctAnswer: 0 }],
+          });
+      }
     
       return (
         <div>
           <h2>Forge Quiz</h2>
           <form onSubmit={handleSubmit}>
+          <input
+          type="text"
+          name="title"
+          value={quizData.title}
+          onChange={(e) => setQuizData({ ...quizData, title: e.target.value })}
+          placeholder="Enter quiz title"
+        />
             {quizData.questions.map((question, index) => (
               <div key={index}>
                 <h3>Question {index + 1}</h3>
