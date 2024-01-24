@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { createQuiz } from '../../../utilities/quiz-api'
-export default function ForgeQuiz() {
+export default function ForgeQuizPage() {
     const [quizData, setQuizData] = useState({
         title: '',
         questions: [{ question: '', options: ['', '', ''], correctAnswer: 0 }],
@@ -46,15 +46,23 @@ export default function ForgeQuiz() {
             })),
           };
       
-          // Call createQuiz function with the formatted data
-          const createdQuiz = await createQuiz(formattedQuizData);
+          try {
+            // Call createQuiz function with the formatted data and updateQuizzes callback
+            const createdQuiz = await createQuiz(formattedQuizData, updateQuizzes);
+      
+            // Optionally, you can handle other actions related to the created quiz
+            console.log('Quiz created:', createdQuiz);
+          } catch (error) {
+            // Handle errors
+            console.error('Error creating quiz:', error);
+          }
       
           // Reset the state after successful quiz creation
           setQuizData({
             title: '',
             questions: [{ question: '', options: ['', '', ''], correctAnswer: 0 }],
           });
-      }
+        };
     
       return (
         <div>

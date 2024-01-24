@@ -8,6 +8,7 @@ import QuestsPage from '../QuestsPage/QuestsPage'
 import ForgePage from '../ForgePage/ForgePage'
 import ForgeQuizPage from '../ForgeQuizPage/ForgeQuizPage'
 import ForgeCardsPage from '../ForgeCardsPage/ForgeCardsPage'
+import PlayQuizPage from '../PlayQuizPage/PlayQuizPage'
 
 function App() {
   const [user, setUser] = useState(getUser())
@@ -23,6 +24,7 @@ function App() {
             <Route path='/forgequest' element={<ForgePage />} />
             <Route path='/forgequiz' element={<ForgeQuizPage />} />
             <Route path='/forgecards' element={<ForgeCardsPage />} />
+            <Route path="/play-quiz/:quizId" component={PlayQuizPage} />
           </Routes>
         </> :
         <AuthPage setUser={setUser} />
